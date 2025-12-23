@@ -19,10 +19,19 @@ for line in fresh.split('\n'):
 
     obj.set_ones(start, end)
 
-count_fresh = 0
-for line in fresh.split('\n'):
-    num = int(line)
-    
-    assert num
+part1 = False
+if part1:
+    count_fresh = 0
+    for line in available.split('\n'):
+        num = int(line)
+        
+        assert num
 
-    count_fresh += obj[num]
+        count_fresh += obj[num]
+
+    print(count_fresh)
+else:
+    total = 0
+    for item in obj.clumps:
+        total += item[1] - item[0] + 1
+    print(total)
