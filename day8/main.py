@@ -1,6 +1,8 @@
 from collections import defaultdict
 import heapq
 import numpy as np
+from networkx.utils import UnionFind # type: ignore
+
 
 
 input_data = None
@@ -13,7 +15,7 @@ assert input_data
 usable = input_data.strip()
 arr = np.array([[int(x) for x in item.split(',')] for item in usable.split('\n')])
 
-part1 = True
+part1 = False
 if part1:  # this solution is really inefficient but I wrote it right before I slept so it was fine to run for a while. fix with union find.
     best = set()
     graph = defaultdict(set)
@@ -49,4 +51,20 @@ if part1:  # this solution is really inefficient but I wrote it right before I s
                 third = value
     print(len(best) * len(second) * len(third))
 else:
-    pass
+    uf = UnionFind()
+    distances = set()
+    for item1 in arr:
+        for item2 in arr:
+            if tuple(item1) == tuple(item2):
+                continue
+            result = (np.linalg.norm(item1 - item2), frozenset((tuple(item1), tuple(item2))))
+            if result in distances:
+                continue
+            distances.add(result)
+
+    for dist, (coord1, coord2) in sorted(distances):
+        uf.union(coord1, coord2)
+        if uf.weights[uf[coord1]] == len(arr):
+            break
+
+    print(coord1[0], '*', coord2[0])
